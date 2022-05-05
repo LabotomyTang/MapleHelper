@@ -23,6 +23,8 @@
         <activity android:name=".starstrategy.StarStrategy"/>
         <activity android:name=".minigames.GuessNumber.GuessNumberAdvisorActivity"/>
         <activity android:name=".growthhelpermenu.GrowthHelperMenuActivity"/>
+        <activity android:name=".growthhelpermenu.growthhelpereasy.GrowthHelperEasyActivity"/>
+        <activity android:name=".growthhelpermenu.growthhelpereasy.GrowthHelperEasyResultActivity"/>
     </application>
 
 </manifest>

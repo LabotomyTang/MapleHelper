@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
+import com.bytedance.jstu.demo.growthhelpermenu.GrowthHelperMenuActivity
 import com.bytedance.jstu.demo.minigames.MiniGames
 import com.bytedance.jstu.demo.starstrategy.StarStrategy
 import java.util.stream.DoubleStream.builder
@@ -32,7 +33,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        btnGrowthHelper.setOnClickListener(View.OnClickListener {
+            startActivity(Intent().apply {
+                setClass(this@MainActivity, GrowthHelperMenuActivity::class.java)
+            })
+        })
 
 
         btnStarStrategy.setOnClickListener(View.OnClickListener {

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#FFBBBBBB</color>
     <color name="guessnumberButton">#FFBBBBBB</color>
+    <color name="red">#44DD0000</color>
 </resources>
