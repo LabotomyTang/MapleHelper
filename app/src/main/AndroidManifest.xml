@@ -25,6 +25,7 @@
         <activity android:name=".growthhelpermenu.GrowthHelperMenuActivity"/>
         <activity android:name=".growthhelpermenu.growthhelpereasy.GrowthHelperEasyActivity"/>
         <activity android:name=".growthhelpermenu.growthhelpereasy.GrowthHelperEasyResultActivity"/>
+        <activity android:name=".growthhelpermenu.growthhelpereasy.GrowthHelperEasyIgnoreActivity"/>
     </application>
 
 </manifest>

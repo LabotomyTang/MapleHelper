@@ -3,23 +3,24 @@ package com.bytedance.jstu.demo.growthhelpermenu.growthhelpereasy
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Toast
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bytedance.jstu.demo.R
 import java.io.*
 import kotlin.system.exitProcess
 
-class GrowthHelperEasyActivity: AppCompatActivity() {
+class GrowthHelperEasyActivity : AppCompatActivity() {
 
     private val defaultSaveFileName: String = "GrowthHelperEasyDefaultSaveFile"
 
@@ -95,6 +96,18 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
         findViewById(R.id.growthhelpereasy_btn_calculate)
     }
 
+    private val imgBtnSecondAttr: ImageButton by lazy {
+        findViewById(R.id.growthhelpereasy_imgbtn_secondattr)
+    }
+
+    private val imgBtnExtraMainAttr: ImageButton by lazy {
+        findViewById(R.id.growthhelpereasy_imgbtn_extramainattr)
+    }
+
+    private val imgBtnCoef: ImageButton by lazy {
+        findViewById(R.id.growthhelpereasy_imgbtn_coef)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_growthhelpereasy)
@@ -112,6 +125,20 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
         setEtAutoRemoveHint(etCriticalDmg)
         setEtAutoRemoveHint(etMainAttrPer)
         setEtAutoRemoveHint(etAttPer)
+
+        setEtEnd(etMainAttr, etSecondAttr)
+        setEtEnd(etSecondAttr, etExtraMainAttr)
+        setEtEnd(etExtraMainAttr, etCoef)
+        setEtEnd(etCoef, etAttrAtt)
+        setEtEnd(etAttrAtt, etDmg)
+        setEtEnd(etDmg, etLastDmg)
+        setEtEnd(etLastDmg, etBossDmg)
+        setEtEnd(etBossDmg, etIgnore)
+        setEtEnd(etIgnore, etCriticalRate)
+        setEtEnd(etCriticalRate, etCriticalDmg)
+        setEtEnd(etCriticalDmg, null)
+
+        setEtEnd(etMainAttrPer, etAttPer)
 
         setEtFloatMethod(etCoef)
         setEtFloatMethod(etLastDmg)
@@ -150,13 +177,66 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
             }
         })
 
+
+        imgBtnSecondAttr.setOnClickListener(View.OnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("说明")
+                .setMessage(
+                    "你可以前往 冒险岛 BWIKI 查询各个职业的副属性"
+                )
+                .setNegativeButton("关闭") { _: DialogInterface, _: Int ->
+
+                }
+                .setNeutralButton("打开 BWIKI") { _: DialogInterface, _: Int ->
+                    var uri: Uri = Uri.parse("https://wiki.biligame.com/maplestory/%E4%B8%BB%E5%89%AF%E5%B1%9E%E6%80%A7%E8%A1%A8")
+                    var intent: Intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+                .show()
+        })
+
+        imgBtnExtraMainAttr.setOnClickListener(View.OnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("说明")
+                .setMessage(
+                    "额外主属性指不受到属性百分比加成的主属性，通常可以直接填入神秘徽章提供的主属性加成。\n" +
+                            "你可以前往 冒险岛 BWIKI 查看详情。"
+                )
+                .setNegativeButton("关闭") { _: DialogInterface, _: Int ->
+
+                }
+                .setNeutralButton("打开 BWIKI") { _: DialogInterface, _: Int ->
+                    var uri: Uri = Uri.parse("https://wiki.biligame.com/maplestory/%E6%B8%B8%E6%88%8F%E4%BC%A4%E5%AE%B3%E5%85%AC%E5%BC%8F#%E6%9C%80%E7%BB%88%E5%B1%9E%E6%80%A7(Final_Stats)")
+                    var intent: Intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+                .show()
+        })
+
+        imgBtnCoef.setOnClickListener(View.OnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("说明")
+                .setMessage("武器系数在计算属性攻击力时会与其他数据相乘，你可以去 冒险岛 BWIKI 查询你的职业的武器系数。")
+                .setNegativeButton("关闭") { _: DialogInterface, _: Int ->
+
+                }
+                .setNeutralButton("打开 BWIKI") { _: DialogInterface, _: Int ->
+                    var uri: Uri = Uri.parse("https://wiki.biligame.com/maplestory/%E6%B8%B8%E6%88%8F%E4%BC%A4%E5%AE%B3%E5%85%AC%E5%BC%8F#%E6%AD%A6%E5%99%A8%E7%B3%BB%E6%95%B0(Weapon_Multiplier)")
+                    var intent: Intent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(intent)
+                }
+                .show()
+        })
+
         load(true)
 
     }
 
     override fun finish() {
+        Log.e("zhTang", "currData: " + getCurrData())
+        Log.e("zhTang", "saveFileData: " + getSaveFileData())
         var currData = getCurrData()
-        if (currData != getSaveFileData()) {
+        if (currData == getSaveFileData()) {
             super.finish()
             return
         }
@@ -175,7 +255,20 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
             .show()
     }
 
-
+    private fun setEtEnd(etCurr: EditText, etNext: EditText?) {
+        etCurr.setOnEditorActionListener(TextView.OnEditorActionListener { textView, i, keyEvent ->
+            if (i != EditorInfo.IME_ACTION_DONE) return@OnEditorActionListener false
+            if (etNext != null && etNext.text.isEmpty()) {
+                etCurr.clearFocus()
+                etNext.requestFocus()
+            } else {
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+                etCurr.clearFocus()
+            }
+            return@OnEditorActionListener true
+        })
+    }
 
     private fun setEtAutoRemoveHint(et: EditText) {
         et.setOnFocusChangeListener { _, hasFocus ->
@@ -186,7 +279,7 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
 
     private fun setEtFloatMethod(et: EditText) {
         et.addTextChangedListener(
-            object: TextWatcher {
+            object : TextWatcher {
                 private var floatCount = 0
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -220,7 +313,7 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
 
     private fun getCurrData(): String {
         var data: String = ""
-        
+
         if (etMainAttr.text.toString().isEmpty()) {
             etMainAttr.hint = "未设置"
             return ""
@@ -250,7 +343,7 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
             etDmg.hint = "未设置"
             return ""
         } else data += etDmg.text.toString() + '\n'
-        
+
         if (etLastDmg.text.toString().isEmpty()) {
             etLastDmg.hint = "未设置"
             return ""
@@ -331,7 +424,7 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("警告")
             .setMessage("先前可能存在的数据将会被覆盖，要继续吗?")
-            .setNegativeButton("取消") { _: DialogInterface, _: Int ->}
+            .setNegativeButton("取消") { _: DialogInterface, _: Int -> }
             .setPositiveButton("确定") { _: DialogInterface, _: Int ->
                 try {
                     val output = openFileOutput(defaultSaveFileName, Context.MODE_PRIVATE)
@@ -364,8 +457,22 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
 
     private fun load(isInit: Boolean): String {
         var data: String = getSaveFileData()
-        if (!isInit && data.isEmpty()) Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show()
-        dataToEt(data)
+        if (isInit) {
+            if (!data.isEmpty()) dataToEt(data)
+        } else {
+            if (!data.isEmpty()) {
+                AlertDialog.Builder(this)
+                    .setTitle("警告")
+                    .setMessage("将用存档数据覆盖当前数据，要继续吗？")
+                    .setNegativeButton("取消") { _: DialogInterface, _: Int ->
+
+                    }
+                    .setPositiveButton("确定") { _: DialogInterface, _: Int ->
+                        dataToEt(data)
+                    }
+                    .show()
+            } else Toast.makeText(this, "没有数据", Toast.LENGTH_SHORT).show()
+        }
         return data
     }
 
@@ -380,9 +487,9 @@ class GrowthHelperEasyActivity: AppCompatActivity() {
         et.setText(singleData)
         return i + 1
     }
-    
+
     private fun dataToEt(data: String) {
-        var index= 0
+        var index = 0
         index = setSingleEtText(etMainAttr, data, index)
         index = setSingleEtText(etSecondAttr, data, index)
         index = setSingleEtText(etExtraMainAttr, data, index)

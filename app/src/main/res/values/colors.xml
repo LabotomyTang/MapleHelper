@@ -10,4 +10,5 @@
     <color name="gray">#FFBBBBBB</color>
     <color name="guessnumberButton">#FFBBBBBB</color>
     <color name="red">#44DD0000</color>
+    <color name="deepgray">#FF444444</color>
 </resources>

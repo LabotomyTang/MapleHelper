@@ -17,4 +17,8 @@
     <string name="growthhelpermenu_tutor">
         简单模拟：输入你的各项面板数值，进行简单的数值增长收益计算\n\n完整模拟：你可以录入技能、联盟、装备、等信息，进行更完整准确的数值增长收益计算
     </string>
+
+    <string name="growthhelpereasyignore_tutor">
+
+    </string>
 </resources>

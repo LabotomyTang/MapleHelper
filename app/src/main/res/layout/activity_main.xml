@@ -14,8 +14,8 @@
             android:id="@+id/mainactivity_imgbtn_growthhelper"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher_foreground" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/shuangnu" />
 
         <TextView
             android:layout_width="match_parent"
@@ -36,8 +36,8 @@
             android:id="@+id/mainactivity_imgBtn_starstrategy"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher_foreground" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/zhanshen" />
 
         <TextView
             android:layout_width="match_parent"
@@ -58,8 +58,8 @@
             android:id="@+id/imgBtn_MiniGames"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_launcher_foreground" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/huanying" />
 
         <TextView
             android:layout_width="match_parent"
