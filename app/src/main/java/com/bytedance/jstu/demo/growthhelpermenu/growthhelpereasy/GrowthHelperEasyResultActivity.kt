@@ -358,6 +358,12 @@ class GrowthHelperEasyResultActivity : AppCompatActivity() {
         return 0f
     }
 
+    private fun clearAllFocus() {
+        etList.forEach {
+            it.clearFocus()
+        }
+    }
+
     private fun update() {
         for (i in (0 until etList.size)) {
             updateSingle(i)
@@ -377,6 +383,7 @@ class GrowthHelperEasyResultActivity : AppCompatActivity() {
     }
 
     private fun updateTotal() {
+        clearAllFocus()
         var oldTotal =
             attrAtt / (100 + dmg) * (100 + dmg + bossDmg) * (criticalRate * (135 + criticalDmg) / 100 + 100 - criticalRate) / 100
         var newAttrList = ArrayList<Float>()
@@ -422,6 +429,11 @@ class GrowthHelperEasyResultActivity : AppCompatActivity() {
             else {
                 et.gravity = Gravity.CENTER_VERTICAL + Gravity.RIGHT
                 if (et.text.isEmpty()) et.setText("0")
+                try {
+                    et.text.toString().toFloat()
+                } catch (e: Exception) {
+                    et.setText("0")
+                }
                 updateSingle(index)
                 if (includedList[index]) updateTotal()
             }

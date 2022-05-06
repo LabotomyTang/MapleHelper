@@ -163,6 +163,7 @@ class GrowthHelperEasyActivity : AppCompatActivity() {
         })
 
         btnCalculate.setOnClickListener(View.OnClickListener {
+            clearAllFocus()
             var data = getCurrData()
             if (data.isEmpty()) {
                 Toast.makeText(this, "参数不全", Toast.LENGTH_SHORT).show()
@@ -273,9 +274,32 @@ class GrowthHelperEasyActivity : AppCompatActivity() {
     private fun setEtAutoRemoveHint(et: EditText) {
         et.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) et.hint = ""
+            else {
+                try {
+                    et.text.toString().toFloat()
+                } catch (e: Exception) {
+                    et.setText("")
+                }
+            }
         }
     }
 
+
+    private fun clearAllFocus() {
+        etMainAttr.clearFocus()
+        etSecondAttr.clearFocus()
+        etExtraMainAttr.clearFocus()
+        etCoef.clearFocus()
+        etAttrAtt.clearFocus()
+        etDmg.clearFocus()
+        etLastDmg.clearFocus()
+        etBossDmg.clearFocus()
+        etIgnore.clearFocus()
+        etCriticalRate.clearFocus()
+        etCriticalDmg.clearFocus()
+        etMainAttrPer.clearFocus()
+        etAttPer.clearFocus()
+    }
 
     private fun setEtFloatMethod(et: EditText) {
         et.addTextChangedListener(
