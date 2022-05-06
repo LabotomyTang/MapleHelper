@@ -175,7 +175,7 @@ class GrowthHelperEasyIgnoreActivity: AppCompatActivity() {
                 txtResult.text = "破防"
                 return
             }
-            var percentage: Float = newDmg / originDmg - 1
+            var percentage: Float = (newDmg / originDmg - 1) * 100
             txtResult.text = "%.2f".format(percentage)
         } else {
             var originDmg: Float = 100 - boss * (100 - ignore) / 100
