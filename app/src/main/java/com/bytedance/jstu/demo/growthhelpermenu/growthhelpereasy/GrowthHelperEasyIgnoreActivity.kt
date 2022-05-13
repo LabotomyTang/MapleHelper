@@ -36,6 +36,10 @@ class GrowthHelperEasyIgnoreActivity: AppCompatActivity() {
         findViewById<CheckBox>(R.id.growthhelpereasyignore_checkbox_redefine)
     }
 
+    private val etIgnoreTotal by lazy {
+        findViewById<EditText>(R.id.growthhelpereasyignore_et_ignoretotal)
+    }
+
     private val etIgnoreOrigin by lazy {
         findViewById<EditText>(R.id.growthhelpereasyignore_et_ignoreorigin)
     }
@@ -56,6 +60,8 @@ class GrowthHelperEasyIgnoreActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_growthhelpereasyignore)
 
+        etBoss.setText("300")
+
         var bundle = intent.extras
         if (bundle != null) {
             var temp: String? = bundle.getString("ignore")
@@ -66,6 +72,7 @@ class GrowthHelperEasyIgnoreActivity: AppCompatActivity() {
                     ignore = 0f
                 }
             }
+            etIgnoreTotal.setText(ignore.toString())
         }
 
         imgBtnTutor.setOnClickListener(View.OnClickListener {
@@ -85,11 +92,17 @@ class GrowthHelperEasyIgnoreActivity: AppCompatActivity() {
 
         checkBoxRedefine.setOnClickListener(View.OnClickListener {
             redefined = checkBoxRedefine.isChecked
+            etIgnoreTotal.isEnabled = redefined
+            if (!redefined) {
+                etIgnoreTotal.setText(ignore.toString())
+            }
         })
 
+        setEtFloatMethod(etIgnoreTotal)
         setEtFloatMethod(etIgnoreOrigin)
         setEtFloatMethod(etIgnoreNew)
 
+        setEtEnd(etIgnoreTotal, etIgnoreOrigin)
         setEtEnd(etBoss, etIgnoreOrigin)
         setEtEnd(etIgnoreOrigin, etIgnoreNew)
 
@@ -165,8 +178,15 @@ class GrowthHelperEasyIgnoreActivity: AppCompatActivity() {
         ignoreNew = etIgnoreNew.text.toString().toFloat()
 
         if (redefined) {
-            var originDmg: Float = 100 - boss * (100 - ignoreOrigin) / 100
-            var newDmg: Float = 100 - boss * (100 - ignoreNew) / 100
+            var ignoreTotalNew = 0f
+            try {
+                ignoreTotalNew = etIgnoreTotal.text.toString().toFloat()
+            } catch (e: Exception) {
+
+            }
+            var originDmg: Float = 100 - boss * (100 - ignoreTotalNew) / 100
+            var totalIgnoreNew: Float = 100 - (100 - ignoreTotalNew) / (100 - ignoreOrigin) * (100 - ignoreNew)
+            var newDmg: Float = 100 - boss * (100 - totalIgnoreNew) / 100
             if (originDmg <= 0f) {
                 if (newDmg <= 0f) {
                     txtResult.text = "无法破防"
